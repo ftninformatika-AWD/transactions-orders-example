@@ -1,4 +1,4 @@
-﻿using TransactionsExample.Models;
+﻿using TransactionsExample.Domain;
 
 namespace TransactionsExample.Services;
 

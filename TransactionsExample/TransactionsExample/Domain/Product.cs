@@ -1,4 +1,4 @@
-﻿namespace TransactionsExample.Models;
+﻿namespace TransactionsExample.Domain;
 
 public class Product
 {

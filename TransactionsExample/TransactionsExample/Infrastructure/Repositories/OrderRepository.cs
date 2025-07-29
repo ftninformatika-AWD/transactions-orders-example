@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TransactionsExample.Models;
+using TransactionsExample.Domain;
 
-namespace TransactionsExample.Repositories;
+namespace TransactionsExample.Infrastructure.Repositories;
 
 public class OrderRepository : IOrderRepository
 {

@@ -1,6 +1,4 @@
-﻿using TransactionsExample.Models;
-
-namespace TransactionsExample.Repositories;
+﻿namespace TransactionsExample.Domain;
 
 public interface IOrderRepository
 {

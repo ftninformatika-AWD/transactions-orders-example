@@ -1,4 +1,4 @@
-﻿namespace TransactionsExample.Exceptions;
+﻿namespace TransactionsExample.Services.Exceptions;
 
 public class NotFoundException : Exception
 {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using TransactionsExample.Domain;
+using TransactionsExample.Services;
 
-namespace TransactionsExample.Repositories;
+namespace TransactionsExample.Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

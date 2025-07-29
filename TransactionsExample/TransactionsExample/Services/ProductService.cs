@@ -1,6 +1,5 @@
 ﻿using TransactionsExample.Exceptions;
-using TransactionsExample.Models;
-using TransactionsExample.Repositories;
+using TransactionsExample.Domain;
 
 namespace TransactionsExample.Services;
 

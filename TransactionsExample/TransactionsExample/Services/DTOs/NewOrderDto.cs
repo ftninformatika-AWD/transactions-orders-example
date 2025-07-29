@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TransactionsExample.DTOs;
+namespace TransactionsExample.Services.DTOs;
 
 public class NewOrderDto
 {
@@ -9,6 +9,6 @@ public class NewOrderDto
     [Required]
     public required string CustomerName { get; set; }
 
-    [Range(1, Double.MaxValue)]
+    [Range(1, double.MaxValue)]
     public int Count { get; set; }
 }

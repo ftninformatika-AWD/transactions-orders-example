@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TransactionsExample.Models;
+using TransactionsExample.Domain;
 
-namespace TransactionsExample.Repositories;
+namespace TransactionsExample.Infrastructure.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepositoryUnstable : IProductRepository
 {
     private readonly AppDbContext _dbContext;
 
-    public ProductRepository(AppDbContext dbContext)
+    public ProductRepositoryUnstable(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -26,15 +26,13 @@ public class ProductRepository : IProductRepository
 
     public async Task RemoveFromStock(Product product, int count)
     {
-        product.Stock -= count;
-        _dbContext.Products.Update(product);
-        await _dbContext.SaveChangesAsync();
+        await Task.Delay(1000);
+        throw new DbUpdateException("Removing from stock failed.");
     }
 
     public async Task RemoveFromStockWithoutSave(Product product, int count)
     {
-        product.Stock -= count;
-        _dbContext.Products.Update(product);
-        await Task.CompletedTask;
+        await Task.Delay(1000);
+        throw new DbUpdateException("Removing from stock failed.");
     }
 }

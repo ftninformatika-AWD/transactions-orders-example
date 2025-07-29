@@ -1,4 +1,4 @@
-﻿using TransactionsExample.DTOs;
+﻿using TransactionsExample.Services.DTOs;
 
 namespace TransactionsExample.Services;
 

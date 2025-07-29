@@ -1,10 +1,10 @@
-﻿namespace TransactionsExample.Models;
+﻿namespace TransactionsExample.Services.DTOs;
 
-public class Order
+public class OrderDto
 {
     public int Id { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; }
 
     public required string CustomerName { get; set; }
 
@@ -14,5 +14,5 @@ public class Order
 
     public int ProductId { get; set; }
 
-    public Product? Product { get; set; }
+    public required string ProductName { get; set; }
 }

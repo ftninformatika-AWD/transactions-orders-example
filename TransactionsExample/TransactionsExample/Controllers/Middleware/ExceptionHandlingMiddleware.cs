@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using TransactionsExample.Exceptions;
+using TransactionsExample.Services.Exceptions;
 
 namespace TransactionsExample.Controllers.Middleware;
 

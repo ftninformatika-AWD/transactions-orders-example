@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using TransactionsExample.DTOs;
-using TransactionsExample.Models;
+using TransactionsExample.Domain;
+using TransactionsExample.Services.DTOs;
 
-namespace TransactionsExample.Settings;
+namespace TransactionsExample.Services.Mappings;
 
 public class MappingProfile : Profile
 {

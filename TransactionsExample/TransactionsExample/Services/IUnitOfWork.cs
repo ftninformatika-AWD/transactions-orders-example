@@ -1,4 +1,6 @@
-﻿namespace TransactionsExample.Repositories;
+﻿using TransactionsExample.Domain;
+
+namespace TransactionsExample.Services;
 
 public interface IUnitOfWork : IDisposable
 {

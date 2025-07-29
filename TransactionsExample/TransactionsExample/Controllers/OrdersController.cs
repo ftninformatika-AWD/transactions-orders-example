@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TransactionsExample.DTOs;
 using TransactionsExample.Services;
+using TransactionsExample.Services.DTOs;
 
 namespace TransactionsExample.Controllers;
 

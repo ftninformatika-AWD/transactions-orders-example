@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TransactionsExample.Controllers.Middleware;
-using TransactionsExample.Repositories;
+using TransactionsExample.Domain;
+using TransactionsExample.Infrastructure.Repositories;
 using TransactionsExample.Services;
-using TransactionsExample.Settings;
+using TransactionsExample.Services.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
