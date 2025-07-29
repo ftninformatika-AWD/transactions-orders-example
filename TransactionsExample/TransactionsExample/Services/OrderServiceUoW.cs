@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using TransactionsExample.Exceptions;
 using TransactionsExample.Domain;
 using TransactionsExample.Services.DTOs;
+using TransactionsExample.Services.Exceptions;
 
 namespace TransactionsExample.Services;
 
@@ -9,19 +9,21 @@ public class OrderServiceUoW : IOrderService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IProductRepository _productRepository;
+    private readonly IOrderRepository _orderRepository;
 
-    public OrderServiceUoW(
-        IUnitOfWork unitOfWork,
-        IMapper mapper
-    )
+    public OrderServiceUoW(IUnitOfWork unitOfWork, IMapper mapper,
+        IProductRepository productRepository, IOrderRepository orderRepository)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _productRepository = productRepository;
+        _orderRepository = orderRepository;
     }
 
     public async Task<OrderDto> Add(NewOrderDto order)
     {
-        Product? product = await  _unitOfWork.ProductRepository.GetOne(order.ProductId);
+        Product? product = await _productRepository.GetOne(order.ProductId);
         if (product == null)
         {
             throw new ProductNotFoundException(order.ProductId);
@@ -45,8 +47,8 @@ public class OrderServiceUoW : IOrderService
 
         try
         {
-            await _unitOfWork.OrderRepository.Add(newOrder);
-            await _unitOfWork.ProductRepository.RemoveFromStock(product, order.Count);
+            await _orderRepository.Add(newOrder);
+            await _productRepository.RemoveFromStock(product, order.Count);
 
             await _unitOfWork.CommitAsync();
         }
@@ -60,7 +62,7 @@ public class OrderServiceUoW : IOrderService
 
     public async Task<List<OrderDto>> GetAll()
     {
-        var orders = await _unitOfWork.OrderRepository.GetAll();
+        var orders = await _orderRepository.GetAll();
         return orders
             .Select(_mapper.Map<OrderDto>)
             .ToList();
@@ -68,7 +70,7 @@ public class OrderServiceUoW : IOrderService
 
     public async Task<OrderDto> GetOne(int id)
     {
-        var order = await _unitOfWork.OrderRepository.GetOne(id);
+        var order = await _orderRepository.GetOne(id);
         if (order == null)
         {
             throw new OrderNotFoundException(id);

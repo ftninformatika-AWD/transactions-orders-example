@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using TransactionsExample.Exceptions;
 using TransactionsExample.Domain;
-using TransactionsExample.Services.DTOs;
 using TransactionsExample.Infrastructure.Repositories;
+using TransactionsExample.Services.DTOs;
+using TransactionsExample.Services.Exceptions;
 
 namespace TransactionsExample.Services;
 

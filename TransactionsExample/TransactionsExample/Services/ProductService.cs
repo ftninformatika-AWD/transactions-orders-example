@@ -1,25 +1,25 @@
-﻿using TransactionsExample.Exceptions;
-using TransactionsExample.Domain;
+﻿using TransactionsExample.Domain;
+using TransactionsExample.Services.Exceptions;
 
 namespace TransactionsExample.Services;
 
 public class ProductService : IProductService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private IProductRepository _productRepository;
 
-    public ProductService(IUnitOfWork unitOfWork)
+    public ProductService(IProductRepository productRepository)
     {
-        _unitOfWork = unitOfWork;
+        _productRepository = productRepository;
     }
 
     public async Task<List<Product>> GetAll()
     {
-        return await _unitOfWork.ProductRepository.GetAll();
+        return await _productRepository.GetAll();
     }
 
     public async Task<Product> GetOne(int id)
     {
-        var product = await _unitOfWork.ProductRepository.GetOne(id);
+        var product = await _productRepository.GetOne(id);
         if (product == null)
         {
             throw new ProductNotFoundException(id);
