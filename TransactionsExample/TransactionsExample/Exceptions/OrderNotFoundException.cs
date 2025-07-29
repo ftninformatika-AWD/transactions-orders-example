@@ -1,9 +1,8 @@
-﻿namespace TransactionsExample.Exceptions
+﻿namespace TransactionsExample.Exceptions;
+
+public class OrderNotFoundException : NotFoundException
 {
-    public class OrderNotFoundException : NotFoundException
+    public OrderNotFoundException(int id) : base("order", id)
     {
-        public OrderNotFoundException(int id) : base("order", id)
-        {
-        }
     }
 }

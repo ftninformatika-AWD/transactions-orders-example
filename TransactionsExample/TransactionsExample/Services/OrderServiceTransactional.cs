@@ -1,90 +1,88 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using TransactionsExample.DTOs;
 using TransactionsExample.Exceptions;
 using TransactionsExample.Models;
 using TransactionsExample.Repositories;
 
-namespace TransactionsExample.Services
+namespace TransactionsExample.Services;
+
+public class OrderServiceTransactional : IOrderService
 {
-    public class OrderServiceTransactional : IOrderService
+    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IMapper _mapper;
+    private readonly AppDbContext _dbContext;
+
+    public OrderServiceTransactional(
+        IOrderRepository orderRepository,
+        IProductRepository productRepository,
+        IMapper mapper,
+        AppDbContext dbContext
+    )
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _dbContext;
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;
+        _mapper = mapper;
+        _dbContext = dbContext;
+    }
 
-        public OrderServiceTransactional(
-            IOrderRepository orderRepository,
-            IProductRepository productRepository,
-            IMapper mapper,
-            AppDbContext dbContext
-            )
+    public async Task<OrderDto> Add(NewOrderDto order)
+    {
+        Product? product = await _productRepository.GetOne(order.ProductId);
+        if (product == null)
         {
-            _orderRepository = orderRepository;
-            _productRepository = productRepository;
-            _mapper = mapper;
-            _dbContext = dbContext;
+            throw new ProductNotFoundException(order.ProductId);
         }
 
-        public async Task<OrderDTO> Add(NewOrderDTO order)
+        // provera da li ima dovoljno proizvoda na stanju
+        if (product.Stock < order.Count)
         {
-            Product? product = await _productRepository.GetOne(order.ProductId);
-            if (product == null)
-            {
-                throw new ProductNotFoundException(order.ProductId);
-            }
-
-            // provera da li ima dovoljno proizvoda na stanju
-            if (product.Stock < order.Count)
-            {
-                throw new OutOfStockException(product.Name);
-            }
-
-            Order newOrder = new Order()
-            {
-                Count = order.Count,
-                CustomerName = order.CustomerName,
-                ProductId = product.Id,
-                TotalPrice = order.Count * product.Price
-            };
-
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                await _orderRepository.AddWithoutSave(newOrder);
-                await _productRepository.RemoveFromStockWithoutSave(product, order.Count);
-
-                await _dbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-
-            return _mapper.Map<OrderDTO>(newOrder);
+            throw new OutOfStockException(product.Name);
         }
 
-        public async Task<List<OrderDTO>> GetAll()
+        Order newOrder = new Order()
         {
-            var orders = await _orderRepository.GetAll();
-            return orders
-                .Select(_mapper.Map<OrderDTO>)
-                .ToList();
+            Count = order.Count,
+            CustomerName = order.CustomerName,
+            ProductId = product.Id,
+            TotalPrice = order.Count * product.Price
+        };
+
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            await _orderRepository.AddWithoutSave(newOrder);
+            await _productRepository.RemoveFromStockWithoutSave(product, order.Count);
+
+            await _dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
         }
 
-        public async Task<OrderDTO> GetOne(int id)
+        return _mapper.Map<OrderDto>(newOrder);
+    }
+
+    public async Task<List<OrderDto>> GetAll()
+    {
+        var orders = await _orderRepository.GetAll();
+        return orders
+            .Select(_mapper.Map<OrderDto>)
+            .ToList();
+    }
+
+    public async Task<OrderDto> GetOne(int id)
+    {
+        var order = await _orderRepository.GetOne(id);
+        if (order == null)
         {
-            var order = await _orderRepository.GetOne(id);
-            if (order == null)
-            {
-                throw new OrderNotFoundException(id);
-            }
-            return _mapper.Map<OrderDTO>(order);
+            throw new OrderNotFoundException(id);
         }
+        return _mapper.Map<OrderDto>(order);
     }
 }

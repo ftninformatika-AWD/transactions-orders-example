@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TransactionsExample.DTOs
+namespace TransactionsExample.DTOs;
+
+public class NewOrderDto
 {
-    public class NewOrderDTO
-    {
-        public int ProductId { get; set; }
+    public int ProductId { get; set; }
 
-        [Required]
-        public required string CustomerName { get; set; }
+    [Required]
+    public required string CustomerName { get; set; }
 
-        [Range(1, Double.MaxValue)]
-        public int Count { get; set; }
-    }
+    [Range(1, Double.MaxValue)]
+    public int Count { get; set; }
 }

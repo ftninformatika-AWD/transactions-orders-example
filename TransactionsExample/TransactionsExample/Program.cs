@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TransactionsExample.Controllers.Middleware;
 using TransactionsExample.Repositories;
 using TransactionsExample.Services;
 using TransactionsExample.Settings;

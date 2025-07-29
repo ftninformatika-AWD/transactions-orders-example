@@ -2,42 +2,41 @@
 using TransactionsExample.DTOs;
 using TransactionsExample.Services;
 
-namespace TransactionsExample.Controllers
+namespace TransactionsExample.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class OrdersController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrdersController : ControllerBase
+    private readonly IOrderService _orderService;
+
+    public OrdersController(IOrderService orderService)
     {
-        private readonly IOrderService _orderService;
+        _orderService = orderService;
+    }
 
-        public OrdersController(IOrderService orderService)
+    [HttpGet]
+    public async Task<IActionResult> GetOrders()
+    {
+        return Ok(await _orderService.GetAll());
+    }
+
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrder(int id)
+    {
+        return Ok(await _orderService.GetOne(id));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PostApartment(NewOrderDto order)
+    {
+        if (!ModelState.IsValid)
         {
-            _orderService = orderService;
+            return BadRequest(ModelState);
+
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetOrders()
-        {
-            return Ok(await _orderService.GetAll());
-        }
-
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrder(int id)
-        {
-            return Ok(await _orderService.GetOne(id));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostApartment(NewOrderDTO order)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-
-            }
-            var savedOrder = await _orderService.Add(order);
-            return Created(string.Empty, savedOrder);
-        }
+        var savedOrder = await _orderService.Add(order);
+        return Created(string.Empty, savedOrder);
     }
 }

@@ -4,68 +4,67 @@ using TransactionsExample.Exceptions;
 using TransactionsExample.Models;
 using TransactionsExample.Repositories;
 
-namespace TransactionsExample.Services
+namespace TransactionsExample.Services;
+
+public class OrderServiceUnsafe : IOrderService
 {
-    public class OrderServiceUnsafe : IOrderService
+    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IMapper _mapper;
+
+    public OrderServiceUnsafe(
+        IOrderRepository orderRepository,
+        IProductRepository productRepository,
+        IMapper mapper
+    )
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;
+        _mapper = mapper;
+    }
 
-        public OrderServiceUnsafe(
-            IOrderRepository orderRepository,
-            IProductRepository productRepository,
-            IMapper mapper
-            )
+    public async Task<OrderDto> Add(NewOrderDto order)
+    {
+        Product? product = await _productRepository.GetOne(order.ProductId);
+        if (product == null)
         {
-            _orderRepository = orderRepository;
-            _productRepository = productRepository;
-            _mapper = mapper;
+            throw new ProductNotFoundException(order.ProductId);
         }
 
-        public async Task<OrderDTO> Add(NewOrderDTO order)
+        // provera da li ima dovoljno proizvoda na stanju
+        if (product.Stock < order.Count)
         {
-            Product? product = await _productRepository.GetOne(order.ProductId);
-            if (product == null)
-            {
-                throw new ProductNotFoundException(order.ProductId);
-            }
-
-            // provera da li ima dovoljno proizvoda na stanju
-            if (product.Stock < order.Count)
-            {
-                throw new OutOfStockException(product.Name);
-            }
-
-            Order newOrder = new Order()
-            {
-                Count = order.Count,
-                CustomerName = order.CustomerName,
-                ProductId = product.Id,
-                TotalPrice = order.Count * product.Price
-            };
-
-            await _orderRepository.Add(newOrder);
-            await _productRepository.RemoveFromStock(product, order.Count);
-            return _mapper.Map<OrderDTO>(newOrder);
+            throw new OutOfStockException(product.Name);
         }
 
-        public async Task<List<OrderDTO>> GetAll()
+        Order newOrder = new Order()
         {
-            var orders = await _orderRepository.GetAll();
-            return orders
-                .Select(_mapper.Map<OrderDTO>)
-                .ToList();
-        }
+            Count = order.Count,
+            CustomerName = order.CustomerName,
+            ProductId = product.Id,
+            TotalPrice = order.Count * product.Price
+        };
 
-        public async Task<OrderDTO> GetOne(int id)
+        await _orderRepository.Add(newOrder);
+        await _productRepository.RemoveFromStock(product, order.Count);
+        return _mapper.Map<OrderDto>(newOrder);
+    }
+
+    public async Task<List<OrderDto>> GetAll()
+    {
+        var orders = await _orderRepository.GetAll();
+        return orders
+            .Select(_mapper.Map<OrderDto>)
+            .ToList();
+    }
+
+    public async Task<OrderDto> GetOne(int id)
+    {
+        var order = await _orderRepository.GetOne(id);
+        if (order == null)
         {
-            var order = await _orderRepository.GetOne(id);
-            if (order == null)
-            {
-                throw new OrderNotFoundException(id);
-            }
-            return _mapper.Map<OrderDTO>(order);
+            throw new OrderNotFoundException(id);
         }
+        return _mapper.Map<OrderDto>(order);
     }
 }

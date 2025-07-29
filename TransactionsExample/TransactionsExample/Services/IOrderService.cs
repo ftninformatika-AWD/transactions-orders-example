@@ -1,11 +1,10 @@
 ﻿using TransactionsExample.DTOs;
 
-namespace TransactionsExample.Services
+namespace TransactionsExample.Services;
+
+public interface IOrderService
 {
-    public interface IOrderService
-    {
-        Task<List<OrderDTO>> GetAll();
-        Task<OrderDTO> GetOne(int id);
-        Task<OrderDTO> Add(NewOrderDTO order);
-    }
+    Task<List<OrderDto>> GetAll();
+    Task<OrderDto> GetOne(int id);
+    Task<OrderDto> Add(NewOrderDto order);
 }

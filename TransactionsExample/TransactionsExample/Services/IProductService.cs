@@ -1,10 +1,9 @@
 ﻿using TransactionsExample.Models;
 
-namespace TransactionsExample.Services
+namespace TransactionsExample.Services;
+
+public interface IProductService
 {
-    public interface IProductService
-    {
-        Task<List<Product>> GetAll();
-        Task<Product> GetOne(int id);
-    }
+    Task<List<Product>> GetAll();
+    Task<Product> GetOne(int id);
 }

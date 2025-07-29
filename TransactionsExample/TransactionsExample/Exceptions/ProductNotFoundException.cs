@@ -1,9 +1,8 @@
-﻿namespace TransactionsExample.Exceptions
+﻿namespace TransactionsExample.Exceptions;
+
+public class ProductNotFoundException : NotFoundException
 {
-    public class ProductNotFoundException : NotFoundException
+    public ProductNotFoundException(int id) : base("product", id)
     {
-        public ProductNotFoundException(int id) : base("product", id)
-        {
-        }
     }
 }

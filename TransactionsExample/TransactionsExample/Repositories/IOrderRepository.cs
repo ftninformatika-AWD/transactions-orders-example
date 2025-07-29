@@ -1,12 +1,11 @@
 ﻿using TransactionsExample.Models;
 
-namespace TransactionsExample.Repositories
+namespace TransactionsExample.Repositories;
+
+public interface IOrderRepository
 {
-    public interface IOrderRepository
-    {
-        Task<Order?> GetOne(int id);
-        Task<List<Order>> GetAll();
-        Task Add(Order order);
-        Task AddWithoutSave(Order order);
-    }
+    Task<Order?> GetOne(int id);
+    Task<List<Order>> GetAll();
+    Task Add(Order order);
+    Task AddWithoutSave(Order order);
 }

@@ -1,9 +1,8 @@
-﻿namespace TransactionsExample.Exceptions
+﻿namespace TransactionsExample.Exceptions;
+
+public class OutOfStockException : BadRequestException
 {
-    public class OutOfStockException : BadRequestException
+    public OutOfStockException(string productName) : base($"Out of stock of product {productName}.")
     {
-        public OutOfStockException(string productName) : base($"Out of stock of product {productName}.")
-        {
-        }
     }
 }

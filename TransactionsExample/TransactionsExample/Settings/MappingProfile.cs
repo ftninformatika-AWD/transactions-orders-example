@@ -2,13 +2,12 @@
 using TransactionsExample.DTOs;
 using TransactionsExample.Models;
 
-namespace TransactionsExample.Settings
+namespace TransactionsExample.Settings;
+
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<Order, OrderDTO>();
-        }
+        CreateMap<Order, OrderDto>();
     }
 }
