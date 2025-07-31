@@ -44,8 +44,8 @@ public class OrderServiceUnsafe : IOrderService
             TotalPrice = order.Count * product.Price
         };
 
-        await _orderRepository.Add(newOrder);
-        await _productRepository.RemoveFromStock(product, order.Count);
+        await _orderRepository.AddWithSave(newOrder);
+        await _productRepository.RemoveFromStockWithSave(product, order.Count);
         return _mapper.Map<OrderDto>(newOrder);
     }
 

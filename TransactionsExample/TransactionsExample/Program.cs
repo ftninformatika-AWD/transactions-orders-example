@@ -30,11 +30,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // builder.Services.AddScoped<IProductRepository, ProductRepositoryUnstable>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // builder.Services.AddScoped<IOrderService, OrderServiceUnsafe>();
 // builder.Services.AddScoped<IOrderService, OrderServiceTransactional>();
 builder.Services.AddScoped<IOrderService, OrderServiceUoW>();
+
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -52,8 +52,8 @@ public class OrderServiceTransactional : IOrderService
 
         try
         {
-            await _orderRepository.AddWithoutSave(newOrder);
-            await _productRepository.RemoveFromStockWithoutSave(product, order.Count);
+            await _orderRepository.Add(newOrder);
+            await _productRepository.RemoveFromStock(product, order.Count);
 
             await _dbContext.SaveChangesAsync();
 

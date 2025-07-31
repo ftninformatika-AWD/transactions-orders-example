@@ -20,7 +20,7 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task CommitAsync()
     {
-        await _context.SaveChangesAsync();
+        await SaveAsync();
         await _transaction.CommitAsync();
     }
 

@@ -26,14 +26,14 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task Add(Order order)
+    public async Task AddWithSave(Order order)
     {
         _dbContext.Orders.Add(order);
         await _dbContext.Entry(order).Reference(o => o.Product).LoadAsync();
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task AddWithoutSave(Order order)
+    public async Task Add(Order order)
     {
         _dbContext.Orders.Add(order);
         await _dbContext.Entry(order).Reference(o => o.Product).LoadAsync();

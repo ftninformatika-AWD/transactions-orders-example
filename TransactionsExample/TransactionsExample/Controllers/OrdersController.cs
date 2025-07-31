@@ -29,7 +29,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostApartment(NewOrderDto order)
+    public async Task<IActionResult> PostOrder(NewOrderDto order)
     {
         if (!ModelState.IsValid)
         {

@@ -24,14 +24,14 @@ public class ProductRepository : IProductRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task RemoveFromStock(Product product, int count)
+    public async Task RemoveFromStockWithSave(Product product, int count)
     {
         product.Stock -= count;
         _dbContext.Products.Update(product);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task RemoveFromStockWithoutSave(Product product, int count)
+    public async Task RemoveFromStock(Product product, int count)
     {
         product.Stock -= count;
         _dbContext.Products.Update(product);

@@ -24,13 +24,13 @@ public class ProductRepositoryUnstable : IProductRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task RemoveFromStock(Product product, int count)
+    public async Task RemoveFromStockWithSave(Product product, int count)
     {
         await Task.Delay(1000);
         throw new DbUpdateException("Removing from stock failed.");
     }
 
-    public async Task RemoveFromStockWithoutSave(Product product, int count)
+    public async Task RemoveFromStock(Product product, int count)
     {
         await Task.Delay(1000);
         throw new DbUpdateException("Removing from stock failed.");
